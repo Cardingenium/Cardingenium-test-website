@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>pLVAD Training & Demonstration System — Cardingenium Medical Technology</title>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'br':    '#E3051C',
+            'br-dk': '#B00415',
+            'br-lt': '#FDE8EA',
+            'bb':    '#0074DE',
+            'bb-dk': '#005AAD',
+            'bb-lt': '#E6F2FD',
+            'n900':  '#1A1A1A',
+            'n700':  '#4A4A4A',
+            'n500':  '#8A8A8A',
+            'n300':  '#D8D8D8',
+            'n100':  '#F4F4F4',
+          },
+          fontFamily: {
+            display: ['Poppins', 'sans-serif'],
+            body:    ['Inter',   'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', 'PingFang SC', sans-serif; background: #F4F4F4; color: #1A1A1A; -webkit-font-smoothing: antialiased; }
+    h1,h2,h3,h4,h5,h6 { font-family: 'Poppins', 'PingFang SC', sans-serif; }
+    p { line-height: 1.75; }
+
+    /* Layered color-tinted shadows */
+    .shd-card  { box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.06), 0 12px 28px rgba(0,0,0,0.04); }
+    .shd-blue  { box-shadow: 0 2px 8px rgba(0,116,222,0.18), 0 8px 32px rgba(0,116,222,0.12), 0 24px 56px rgba(0,0,0,0.08); }
+    .shd-red   { box-shadow: 0 2px 8px rgba(227,5,28,0.22), 0 8px 24px rgba(227,5,28,0.14); }
+    .shd-float { box-shadow: 0 4px 8px rgba(0,0,0,0.06), 0 16px 32px rgba(0,0,0,0.10), 0 32px 64px rgba(0,0,0,0.06); }
+
+    /* Spring transitions */
+    .ts { transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1), opacity 0.18s ease, box-shadow 0.2s ease; }
+    .tc { transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease; }
+
+    .lift:hover  { transform: translateY(-4px); }
+    .lift:active { transform: translateY(-1px) scale(0.99); }
+    .btn:active  { transform: scale(0.97); }
+
+    /* Accordion */
+    details summary { cursor: pointer; list-style: none; user-select: none; }
+    details summary::-webkit-details-marker { display: none; }
+    details[open] .chev { transform: rotate(180deg); }
+    .chev { transition: transform 0.2s ease-out; }
+    details[open] .acc-dot { background: #E3051C; }
+
+    :focus-visible { outline: 2px solid #0074DE; outline-offset: 3px; border-radius: 6px; }
+
+    /* Grain overlay on hero */
+    .grain { position: relative; }
+    .grain::before {
+      content: '';
+      position: absolute; inset: 0;
+      pointer-events: none; z-index: 1;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      background-size: 300px 300px;
+    }
+
+    /* Card image zoom */
+    .img-zoom { overflow: hidden; }
+    .img-zoom img { transition: transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94); }
+    .img-zoom:hover img { transform: scale(1.04); }
+
+    .flink { color: #8A8A8A; transition: color 0.15s ease; }
+    .flink:hover { color: #FFFFFF; }
+
+    /* Warning badge pulse */
+    @keyframes pulse-ring {
+      0%   { transform: scale(1); opacity: 0.6; }
+      70%  { transform: scale(2.2); opacity: 0; }
+      100% { transform: scale(2.2); opacity: 0; }
+    }
+    .pulse-ring::after {
+      content: ''; position: absolute; inset: 0; border-radius: 50%;
+      background: #E3051C;
+      animation: pulse-ring 2.5s cubic-bezier(0.455,0.03,0.515,0.955) infinite;
+    }
+
+    /* P-level table */
+    .p-table tr:nth-child(odd)  { background: rgba(0,116,222,0.04); }
+    .p-table tr:nth-child(even) { background: #fff; }
+
+    /* Warning card */
+    .warn-card {
+      border-left: 3px solid #E3051C;
+      background: linear-gradient(135deg, #FDE8EA 0%, #FBD0D6 100%);
+      box-shadow: 0 4px 16px rgba(227,5,28,0.15);
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     NAV
+═══════════════════════════════════════════ -->
+<header id="site-nav" class="fixed top-0 left-0 right-0 z-50 bg-white/96 backdrop-blur-md"
+  style="border-bottom:1px solid rgba(216,216,216,0.6);box-shadow:0 1px 0 rgba(0,0,0,0.03),0 2px 8px rgba(0,0,0,0.04);">
+  <nav class="max-w-7xl mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
+
+    <a href="#" class="flex-shrink-0">
+      <img src="Brand-assets/Cardingenium_Logo.png" alt="Cardingenium Medical Technology" class="h-10 w-auto">
+    </a>
+
+    <div class="hidden lg:flex items-center gap-8">
+      <a href="#overview"    class="tc text-sm font-medium text-n700 hover:text-bb">Product</a>
+      <a href="#features"    class="tc text-sm font-medium text-n700 hover:text-bb">Features</a>
+      <a href="#components"  class="tc text-sm font-medium text-n700 hover:text-bb">Components</a>
+      <a href="#use-cases"   class="tc text-sm font-medium text-n700 hover:text-bb">Use Cases</a>
+      <a href="#modules"     class="tc text-sm font-medium text-n700 hover:text-bb">Modules</a>
+      <a href="#faq"         class="tc text-sm font-medium text-n700 hover:text-bb">FAQ</a>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <a href="#contact"
+        class="btn tc inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold text-white"
+        style="background:#E3051C;font-family:'Poppins',sans-serif;"
+        onmouseover="this.style.background='#B00415'" onmouseout="this.style.background='#E3051C'">
+        Request Information
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+  </nav>
+</header>
+
+
+<!-- ═══════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════ -->
+<section class="grain relative min-h-screen flex items-center pt-16 overflow-hidden" style="background:linear-gradient(to bottom, #FFFFFF 0%, #FFFFFF 55%, #F4F4F4 100%);">
+
+  <div class="relative w-full max-w-7xl mx-auto px-6 lg:px-10 py-28 lg:py-36 text-center" style="z-index:2;">
+
+    <!-- TDS mark -->
+    <img src="Brand-assets/TDS%20new.png" alt="TDS" class="mx-auto mb-6 h-[25rem] w-auto lg:h-[30rem]">
+
+    <!-- Headline -->
+    <h1 class="font-display font-bold leading-tight mb-6"
+      style="font-size:clamp(2.4rem,5.5vw,4.2rem);letter-spacing:-0.03em;color:#1A1A1A;margin:0 auto 24px;text-align:center;">
+      <span style="white-space:nowrap;">pLVAD Training &amp;</span>
+      <br>
+      <span style="white-space:nowrap;">Demonstration System</span>
+    </h1>
+
+    <!-- Training-only badge -->
+    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase mb-6"
+      style="background:#FDE8EA;color:#B00415;border:1px solid rgba(227,5,28,0.2);">
+      <span class="relative inline-block w-2 h-2 pulse-ring" style="border-radius:50%;background:#E3051C;"></span>
+      For Training &amp; Demonstration Only
+    </div>
+
+    <!-- Sub -->
+    <p class="text-lg lg:text-xl text-n700 mb-10 max-w-2xl mx-auto" style="text-align:center;">
+      A compact, professional simulation platform for
+      <br>
+      procedural training, technical demonstration, and patient education
+      <br>
+      Designed by Cardingenium Medical Technology
+    </p>
+
+    <!-- CTAs -->
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+      <a href="#overview"
+        class="btn ts inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold text-white shd-red"
+        style="background:#E3051C;font-family:'Poppins',sans-serif;"
+        onmouseover="this.style.background='#B00415'" onmouseout="this.style.background='#E3051C'">
+        Explore the System
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+      <a href="#contact"
+        class="btn ts inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold"
+        style="color:#0074DE;border:1.5px solid #0074DE;background:transparent;font-family:'Poppins',sans-serif;"
+        onmouseover="this.style.background='#E6F2FD'" onmouseout="this.style.background='transparent'">
+        Contact Us
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     TRUST STRIP — intended users
+═══════════════════════════════════════════ -->
+<section class="bg-white py-14" style="border-top:1px solid #D8D8D8;border-bottom:1px solid #D8D8D8;">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+    <p class="text-center text-lg font-semibold uppercase tracking-widest text-n500 mb-10" style="font-family:'Poppins',sans-serif;">
+      Designed for <span class="normal-case">p</span>LVAD clinical teams
+    </p>
+    <div class="flex flex-nowrap items-center justify-center gap-4 lg:gap-6 overflow-x-auto">
+      <span class="font-display font-semibold text-n300 text-base tracking-tight" style="white-space:nowrap;">Interventional Cardiologists</span>
+      <span class="font-display font-semibold text-n300 text-base tracking-tight" style="white-space:nowrap;">Catheterization Labs</span>
+      <span class="font-display font-semibold text-n300 text-base tracking-tight" style="white-space:nowrap;">Medical Education Centers</span>
+      <span class="font-display font-semibold text-n300 text-base tracking-tight" style="white-space:nowrap;">Clinical Simulation Programs</span>
+      <span class="font-display font-semibold text-n300 text-base tracking-tight" style="white-space:nowrap;">Patient Education Teams</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     OVERVIEW / PRODUCT SHOWCASE
+═══════════════════════════════════════════ -->
+<section id="overview" class="py-24 lg:py-32 bg-white">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+    <div class="max-w-2xl mb-16">
+      <p class="text-xs font-semibold uppercase tracking-widest mb-3" style="color:#0074DE;font-family:'Poppins',sans-serif;">Overview</p>
+      <h2 class="font-display font-bold text-4xl lg:text-5xl mb-6" style="letter-spacing:-0.03em;color:#1A1A1A;">
+        Simulation without compromise
+      </h2>
+      <p class="text-lg text-n700">
+        This system provides a safe, non-clinical simulation environment for users to proficiently master standard pLVAD device implantation workflows and core operating principles. With a space-saving and portable design, it fits equally in simulation labs and clinicians' offices. As a cost-effective alternative to training on an original device, it significantly reduces the cost of damage incurred during hands-on practice and demonstrations.
+      </p>
+    </div>
+
+    <!-- Four access/placement modes -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="rounded-2xl overflow-hidden bg-n100 shd-card">
+        <div class="img-zoom relative aspect-video flex items-center justify-center p-6" style="background:#F4F7FA;">
+          <img src="Brand-assets/VF.png"
+            alt="Vertical placement femoral artery access" class="max-w-full max-h-full object-contain">
+        </div>
+        <div class="p-6">
+          <h3 class="font-display font-semibold text-lg" style="color:#1A1A1A;">Vertical placement femoral artery access</h3>
+        </div>
+      </div>
+      <div class="rounded-2xl overflow-hidden bg-n100 shd-card">
+        <div class="img-zoom relative aspect-video flex items-center justify-center p-6" style="background:#F4F7FA;">
+          <img src="Brand-assets/VA.png"
+            alt="Vertical placement axillary artery access" class="max-w-full max-h-full object-contain">
+        </div>
+        <div class="p-6">
+          <h3 class="font-display font-semibold text-lg" style="color:#1A1A1A;">Vertical placement axillary artery access</h3>
+        </div>
+      </div>
+      <div class="rounded-2xl overflow-hidden bg-n100 shd-card">
+        <div class="img-zoom relative aspect-video flex items-center justify-center p-6" style="background:#F4F7FA;">
+          <img src="Brand-assets/HF.png"
+            alt="Horizontal placement femoral artery access" class="max-w-full max-h-full object-contain">
+        </div>
+        <div class="p-6">
+          <h3 class="font-display font-semibold text-lg" style="color:#1A1A1A;">Horizontal placement femoral artery access</h3>
+        </div>
+      </div>
+      <div class="rounded-2xl overflow-hidden bg-n100 shd-card">
+        <div class="img-zoom relative aspect-video flex items-center justify-center p-6" style="background:#F4F7FA;">
+          <img src="Brand-assets/HA.png"
+            alt="Horizontal placement axillary artery access" class="max-w-full max-h-full object-contain">
+        </div>
+        <div class="p-6">
+          <h3 class="font-display font-semibold text-lg" style="color:#1A1A1A;">Horizontal placement axillary artery access</h3>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     USE CASES  (3 cards)
+═══════════════════════════════════════════ -->
+<section id="use-cases" class="py-24 lg:py-32" style="background:#F4F4F4;">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+    <div class="text-center max-w-2xl mx-auto mb-16">
+      <p class="text-xs font-semibold uppercase tracking-widest mb-3" style="color:#E3051C;font-family:'Poppins',sans-serif;">Use Cases</p>
+      <h2 class="font-display font-bold text-4xl lg:text-5xl mb-6" style="letter-spacing:-0.03em;color:#1A1A1A;">
+        Purpose-built for clinical learning.
+      </h2>
+      <p class="text-lg text-n700">
+        Three core application scenarios covered in a single compact platform.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+      <!-- Card 1 -->
+      <article class="ts lift rounded-2xl overflow-hidden bg-white shd-card">
+        <div class="img-zoom relative aspect-video">
+          <img src="https://placehold.co/600x338/E6F2FD/0074DE?text=Procedural+Training"
+            alt="Procedural Training" class="w-full h-full object-cover">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+          <div class="absolute inset-0" style="background:rgba(0,116,222,0.10);mix-blend-mode:multiply;"></div>
+        </div>
+        <div class="p-6">
+          <h3 class="font-display font-semibold text-xl mb-2" style="color:#1A1A1A;">Procedural Training</h3>
+          <p class="text-sm text-n700">Enable trainees to proficiently master standard pLVAD implantation workflows. Both femoral and axillary access routes fully reproduced for hands-on practice.</p>
+          <a href="#features"
+            class="tc inline-flex items-center gap-1.5 mt-5 text-sm font-semibold"
+            style="color:#0074DE;font-family:'Poppins',sans-serif;"
+            onmouseover="this.style.color='#005AAD'" onmouseout="this.style.color='#0074DE'">
+            Learn more
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- Card 2 -->
+      <article class="ts lift rounded-2xl overflow-hidden bg-white shd-card">
+        <div class="img-zoom relative aspect-video">
+          <img src="https://placehold.co/600x338/FDE8EA/E3051C?text=Patient+Education"
+            alt="Patient Education" class="w-full h-full object-cover">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+          <div class="absolute inset-0" style="background:rgba(227,5,28,0.10);mix-blend-mode:multiply;"></div>
+        </div>
+        <div class="p-6">
+          <h3 class="font-display font-semibold text-xl mb-2" style="color:#1A1A1A;">Patient Education</h3>
+          <p class="text-sm text-n700">Place the system in clinicians' offices to visually and vividly explain pLVAD surgical procedures to patients pre-operatively, improving doctor-patient communication.</p>
+          <a href="#features"
+            class="tc inline-flex items-center gap-1.5 mt-5 text-sm font-semibold"
+            style="color:#E3051C;font-family:'Poppins',sans-serif;"
+            onmouseover="this.style.color='#B00415'" onmouseout="this.style.color='#E3051C'">
+            Learn more
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- Card 3 -->
+      <article class="ts lift rounded-2xl overflow-hidden bg-white shd-card">
+        <div class="img-zoom relative aspect-video">
+          <img src="https://placehold.co/600x338/F4F4F4/4A4A4A?text=Technical+Demonstration"
+            alt="Technical Demonstration" class="w-full h-full object-cover">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+          <div class="absolute inset-0" style="background:rgba(26,26,26,0.08);mix-blend-mode:multiply;"></div>
+        </div>
+        <div class="p-6">
+          <h3 class="font-display font-semibold text-xl mb-2" style="color:#1A1A1A;">Technical Demonstration</h3>
+          <p class="text-sm text-n700">Demonstrate device mechanics and operating principles on-site. The adjustable impeller motor and LED illumination system enable vivid visual demonstrations at any speed.</p>
+          <a href="#features"
+            class="tc inline-flex items-center gap-1.5 mt-5 text-sm font-semibold"
+            style="color:#0074DE;font-family:'Poppins',sans-serif;"
+            onmouseover="this.style.color='#005AAD'" onmouseout="this.style.color='#0074DE'">
+            Learn more
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     FEATURES ACCORDION
+═══════════════════════════════════════════ -->
+<section id="features" class="py-24 lg:py-32 bg-white">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+    <div class="max-w-2xl mb-16">
+      <p class="text-xs font-semibold uppercase tracking-widest mb-3" style="color:#0074DE;font-family:'Poppins',sans-serif;">Features</p>
+      <h2 class="font-display font-bold text-4xl lg:text-5xl mb-4" style="letter-spacing:-0.03em;color:#1A1A1A;">
+        Everything your training program needs
+      </h2>
+    </div>
+
+    <div style="border-top:1px solid #D8D8D8;">
+
+      <details>
+        <summary class="flex items-center justify-between gap-4 py-5" style="border-bottom:1px solid #D8D8D8;">
+          <div class="flex items-center gap-3">
+            <span class="acc-dot tc w-2 h-2 rounded-full flex-shrink-0" style="background:#D8D8D8;"></span>
+            <span class="font-display font-semibold text-lg" style="color:#1A1A1A;">Transparent Heart Model</span>
+          </div>
+          <span class="chev flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center" style="background:#F4F4F4;">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#4A4A4A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </summary>
+        <p class="py-5 text-n700 max-w-3xl" style="border-bottom:1px solid #D8D8D8;">
+          The transparent heart model includes left and right heart chambers, aortic valve, mitral valve and tricuspid valve — all made from soft material. The aortic valve is detachable and replaceable due to wear. The transparent cover attaches via magnetic connection, enabling clear visual inspection of the heart pump installed inside.
+        </p>
+      </details>
+
+      <details>
+        <summary class="flex items-center justify-between gap-4 py-5" style="border-bottom:1px solid #D8D8D8;">
+          <div class="flex items-center gap-3">
+            <span class="acc-dot tc w-2 h-2 rounded-full flex-shrink-0" style="background:#D8D8D8;"></span>
+            <span class="font-display font-semibold text-lg" style="color:#1A1A1A;">Adjustable High-Speed Motor with LED</span>
+          </div>
+          <span class="chev flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center" style="background:#F4F4F4;">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#4A4A4A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </summary>
+        <p class="py-5 text-n700 max-w-3xl" style="border-bottom:1px solid #D8D8D8;">
+          The simulated pLVAD pump is equipped with a continuously adjustable high-speed motor. Theoretical impeller speed can reach 50,000 rpm; the system limits maximum speed to extend motor service life. A micro-LED above the impeller provides real-time visual feedback of rotational status. For demonstration at ultra-low speed (~5 revolutions per second), push the lever to high speed first, then slowly pull back.
+        </p>
+      </details>
+
+      <details>
+        <summary class="flex items-center justify-between gap-4 py-5" style="border-bottom:1px solid #D8D8D8;">
+          <div class="flex items-center gap-3">
+            <span class="acc-dot tc w-2 h-2 rounded-full flex-shrink-0" style="background:#D8D8D8;"></span>
+            <span class="font-display font-semibold text-lg" style="color:#1A1A1A;">Aircraft-Inspired Controller</span>
+          </div>
+          <span class="chev flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center" style="background:#F4F4F4;">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#4A4A4A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </summary>
+        <p class="py-5 text-n700 max-w-3xl" style="border-bottom:1px solid #D8D8D8;">
+          Inspired by aircraft cockpit design, the speed control lever operates like an aircraft thrust lever. Push forward to increase impeller speed (P0–P9). Pull-to-unlock toggle switches manage main power supply and impeller LED separately, providing an intuitive and memorable training experience.
+        </p>
+      </details>
+
+      <details>
+        <summary class="flex items-center justify-between gap-4 py-5" style="border-bottom:1px solid #D8D8D8;">
+          <div class="flex items-center gap-3">
+            <span class="acc-dot tc w-2 h-2 rounded-full flex-shrink-0" style="background:#D8D8D8;"></span>
+            <span class="font-display font-semibold text-lg" style="color:#1A1A1A;">Dual Power Supply</span>
+          </div>
+          <span class="chev flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center" style="background:#F4F4F4;">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#4A4A4A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </summary>
+        <p class="py-5 text-n700 max-w-3xl" style="border-bottom:1px solid #D8D8D8;">
+          Supports both 5V USB-C power and four AA batteries, enabling flexible deployment without fixed power sources. Ideal for offline training sessions, on-site product demonstrations, and patient education. Note: Type-C to Type-C cables may cause device failure — use a standard USB-A to USB-C cable.
+        </p>
+      </details>
+
+      <details>
+        <summary class="flex items-center justify-between gap-4 py-5" style="border-bottom:1px solid #D8D8D8;">
+          <div class="flex items-center gap-3">
+            <span class="acc-dot tc w-2 h-2 rounded-full flex-shrink-0" style="background:#D8D8D8;"></span>
+            <span class="font-display font-semibold text-lg" style="color:#1A1A1A;">PTFE Self-Lubricating Catheter</span>
+          </div>
+          <span class="chev flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center" style="background:#F4F4F4;">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#4A4A4A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </summary>
+        <p class="py-5 text-n700 max-w-3xl" style="border-bottom:1px solid #D8D8D8;">
+          The outer layer of the heart pump hose is made of soft PTFE, enabling smooth training operations without liquid lubrication. Constructed with a Nitinol spring and TPU sheath for realistic procedural tactile feedback. The pigtail catheter is replaceable to extend system service life.
+        </p>
+      </details>
+
+      <details>
+        <summary class="flex items-center justify-between gap-4 py-5" style="border-bottom:1px solid #D8D8D8;">
+          <div class="flex items-center gap-3">
+            <span class="acc-dot tc w-2 h-2 rounded-full flex-shrink-0" style="background:#D8D8D8;"></span>
+            <span class="font-display font-semibold text-lg" style="color:#1A1A1A;">Display Screen with P-Level Readout</span>
+          </div>
+          <span class="chev flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center" style="background:#F4F4F4;">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#4A4A4A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </summary>
+        <div class="py-5" style="border-bottom:1px solid #D8D8D8;">
+          <p class="text-n700 max-w-3xl mb-6">The onboard display shows operating parameters including P-level (P0–P9) and corresponding mean flow rates, replicating a clinical pLVAD controller interface.</p>
+          <div class="overflow-x-auto max-w-sm">
+            <table class="p-table w-full text-sm rounded-xl overflow-hidden border" style="border-color:#E6F2FD;">
+              <thead>
+                <tr style="background:#0074DE;">
+                  <th class="px-5 py-3 text-left font-semibold text-white" style="font-family:'Poppins',sans-serif;">P-Level</th>
+                  <th class="px-5 py-3 text-left font-semibold text-white" style="font-family:'Poppins',sans-serif;">Mean Flow Rate (L/min)</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-blue-50">
+                <tr><td class="px-5 py-2.5 text-n700">P-0</td><td class="px-5 py-2.5 text-n700">0.0</td></tr>
+                <tr><td class="px-5 py-2.5 text-n700">P-1</td><td class="px-5 py-2.5 text-n700">0.0 – 0.9</td></tr>
+                <tr><td class="px-5 py-2.5 text-n700">P-2</td><td class="px-5 py-2.5 text-n700">1.1 – 2.1</td></tr>
+                <tr><td class="px-5 py-2.5 text-n700">P-3</td><td class="px-5 py-2.5 text-n700">1.6 – 2.3</td></tr>
+                <tr><td class="px-5 py-2.5 text-n700">P-4</td><td class="px-5 py-2.5 text-n700">2.0 – 2.5</td></tr>
+                <tr><td class="px-5 py-2.5 text-n700">P-5</td><td class="px-5 py-2.5 text-n700">2.3 – 2.7</td></tr>
+                <tr><td class="px-5 py-2.5 text-n700">P-6</td><td class="px-5 py-2.5 text-n700">2.5 – 2.9</td></tr>
+                <tr><td class="px-5 py-2.5 text-n700">P-7</td><td class="px-5 py-2.5 text-n700">2.9 – 3.3</td></tr>
+                <tr><td class="px-5 py-2.5 text-n700">P-8</td><td class="px-5 py-2.5 text-n700">3.1 – 3.4</td></tr>
+                <tr><td class="px-5 py-2.5 text-n700">P-9</td><td class="px-5 py-2.5 text-n700">3.3 – 3.7</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </details>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     COMPONENTS  (4-col cards)
+═══════════════════════════════════════════ -->
+<section id="components" class="py-24 lg:py-32" style="background:#F4F4F4;">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+    <div class="text-center max-w-2xl mx-auto mb-16">
+      <p class="text-xs font-semibold uppercase tracking-widest mb-3" style="color:#E3051C;font-family:'Poppins',sans-serif;">Components</p>
+      <h2 class="font-display font-bold text-4xl lg:text-5xl mb-6" style="letter-spacing:-0.03em;color:#1A1A1A;text-align:center;line-height:1.5;">
+        Every part
+        <br>
+        Precisely designed
+      </h2>
+      <p class="text-lg text-n700">
+        Each component of the pLVAD system is engineered to replicate real clinical anatomy and device mechanics.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+      <div class="ts lift bg-white rounded-2xl p-6 shd-card">
+        <div class="w-12 h-12 rounded-xl mb-5 flex items-center justify-center" style="background:#E6F2FD;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M12 21C12 21 4 16.5 4 10a8 8 0 0116 0c0 6.5-8 11-8 11z" stroke="#0074DE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="font-display font-semibold text-base mb-2" style="color:#1A1A1A;">Transparent Heart Model</h3>
+        <p class="text-sm text-n700">Left &amp; right chambers, aortic arch, descending aorta, three soft silicone valves. Magnetic assembly and disassembly. Replaceable aortic valve.</p>
+      </div>
+
+      <div class="ts lift bg-white rounded-2xl p-6 shd-card">
+        <div class="w-12 h-12 rounded-xl mb-5 flex items-center justify-center" style="background:#FDE8EA;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2v6M12 22v-6M4.93 4.93l4.24 4.24M14.83 14.83l4.24 4.24M2 12h6M22 12h-6M4.93 19.07l4.24-4.24M14.83 9.17l4.24-4.24" stroke="#E3051C" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3 class="font-display font-semibold text-base mb-2" style="color:#1A1A1A;">1:1 Scale pLVAD Model</h3>
+        <p class="text-sm text-n700">Designed and manufactured at 1:1 scale. Rotatable impeller with adjustable speed, micro-LED illumination, butterfly magnetic connector at catheter tail.</p>
+      </div>
+
+      <div class="ts lift bg-white rounded-2xl p-6 shd-card">
+        <div class="w-12 h-12 rounded-xl mb-5 flex items-center justify-center" style="background:#E6F2FD;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <rect x="2" y="7" width="20" height="14" rx="2" stroke="#0074DE" stroke-width="1.5"/>
+            <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" stroke="#0074DE" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="12" y1="12" x2="12" y2="16" stroke="#0074DE" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3 class="font-display font-semibold text-base mb-2" style="color:#1A1A1A;">Equipment Base</h3>
+        <p class="text-sm text-n700">Integrates heart model bracket, storage drawer, display screen, battery compartment, power switch, and aircraft-inspired speed control lever.</p>
+      </div>
+
+      <div class="ts lift bg-white rounded-2xl p-6 shd-card">
+        <div class="w-12 h-12 rounded-xl mb-5 flex items-center justify-center" style="background:#FDE8EA;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M12 5v14M5 12h14" stroke="#E3051C" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="12" cy="12" r="9" stroke="#E3051C" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <h3 class="font-display font-semibold text-base mb-2" style="color:#1A1A1A;">Accessories</h3>
+        <p class="text-sm text-n700">Includes EasyGuide Lumen, 0.018-inch installing guidewire, pump fixing clip, and storage for the original heart pump in the drawer compartment.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     CUSTOMIZABLE MODULES
+═══════════════════════════════════════════ -->
+<section id="modules" class="py-24 lg:py-32" style="background:#FFFFFF;">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+    <div class="text-center max-w-2xl mx-auto mb-16">
+      <p class="text-xs font-semibold uppercase tracking-widest mb-3" style="color:#E3051C;font-family:'Poppins',sans-serif;">Customization</p>
+      <h2 class="font-display font-bold text-4xl lg:text-5xl mb-6" style="letter-spacing:-0.03em;color:#1A1A1A;">
+        Built to extend
+      </h2>
+      <p class="text-lg text-n700">
+        Every hardware, software, and interface element can be tailored to specific training needs — a selection of add-on modules is shown below.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+      <div class="ts lift bg-white rounded-2xl p-6 shd-card">
+        <div class="w-12 h-12 rounded-xl mb-5 flex items-center justify-center" style="background:#E6F2FD;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M12 3v7M12 10l-5 9M12 10l5 9" stroke="#0074DE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="font-display font-semibold text-base mb-2" style="color:#1A1A1A;">Vascular Access Modules</h3>
+        <p class="text-sm text-n700">Femoral and axillary artery vascular modules connect to the heart model via quick adapters, with an optional sensor system for real-time positional tracking of the pump.</p>
+      </div>
+
+      <div class="ts lift bg-white rounded-2xl p-6 shd-card">
+        <div class="w-12 h-12 rounded-xl mb-5 flex items-center justify-center" style="background:#FDE8EA;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2C12 2 5 10 5 15a7 7 0 0014 0c0-5-7-13-7-13z" stroke="#E3051C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="font-display font-semibold text-base mb-2" style="color:#1A1A1A;">Fluid Visualization Module</h3>
+        <p class="text-sm text-n700">A dual-tank fluid circuit shows fluid moving into and out of the aorta in real time, with an electric pump recirculating flow — a clearer alternative to a plain water-submerged demo.</p>
+      </div>
+
+      <div class="ts lift bg-white rounded-2xl p-6 shd-card">
+        <div class="w-12 h-12 rounded-xl mb-5 flex items-center justify-center" style="background:#E6F2FD;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M3 12h4l2-7 4 14 2-7h6" stroke="#0074DE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="font-display font-semibold text-base mb-2" style="color:#1A1A1A;">AI-Driven Simulation &amp; Imaging</h3>
+        <p class="text-sm text-n700">Real-time rendered ultrasound and cardiography imaging from live camera input, with patient-case loading, scenario simulation, and voice-guided procedural debriefing.</p>
+      </div>
+
+      <div class="ts lift bg-white rounded-2xl p-6 shd-card">
+        <div class="w-12 h-12 rounded-xl mb-5 flex items-center justify-center" style="background:#FDE8EA;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4z" stroke="#E3051C" stroke-width="1.5" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="font-display font-semibold text-base mb-2" style="color:#1A1A1A;">Alternative Heart Model</h3>
+        <p class="text-sm text-n700">A desktop-ornament version of the heart model for clinicians' offices, with an optional heart-pump-shaped pen accessory for a practical, branded touch.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     DARK SECTION — contact / location
+═══════════════════════════════════════════ -->
+<section id="contact" class="py-24 lg:py-32" style="background:#1A1A1A;">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+      <!-- Left -->
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-widest mb-4" style="color:#E3051C;font-family:'Poppins',sans-serif;">Contact</p>
+        <h2 class="font-display font-bold text-4xl lg:text-5xl mb-6 text-white" style="letter-spacing:-0.03em;">
+          Get in touch with our team
+        </h2>
+        <p class="text-lg mb-8" style="color:#8A8A8A;line-height:1.75;">
+          Interested in the pLVAD Training &amp; Demonstration System for your institution, simulation center, or collaboration? Contact Cardingenium Medical Technology GmbH directly.
+        </p>
+        <ul class="space-y-4 mb-10">
+          <li class="flex items-start gap-3">
+            <span class="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center mt-0.5" style="background:rgba(0,116,222,0.15);">
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                <path d="M2 5l2 2 4-4" stroke="#0074DE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span class="text-sm" style="color:#D8D8D8;">Cardingenium Medical Technology GmbH</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center mt-0.5" style="background:rgba(0,116,222,0.15);">
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                <path d="M2 5l2 2 4-4" stroke="#0074DE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span class="text-sm" style="color:#D8D8D8;">Fürstenrieder Straße 5 / 3. OG., D-80687 Munich, Germany</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center mt-0.5" style="background:rgba(0,116,222,0.15);">
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                <path d="M2 5l2 2 4-4" stroke="#0074DE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span class="text-sm" style="color:#D8D8D8;">Made in Europe</span>
+          </li>
+        </ul>
+        <a href="mailto:info@cardingenium.com"
+          class="btn tc inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold text-white shd-red"
+          style="background:#E3051C;font-family:'Poppins',sans-serif;"
+          onmouseover="this.style.background='#B00415'" onmouseout="this.style.background='#E3051C'">
+          Send an Enquiry
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+
+      <!-- Right — stat card -->
+      <div class="relative mx-auto" style="max-width:70%;">
+        <div class="rounded-2xl overflow-hidden" style="box-shadow:0 8px 32px rgba(0,0,0,0.4),0 24px 64px rgba(0,0,0,0.25);">
+          <img src="Brand-assets/TDS%20new.png"
+            alt="pLVAD Training System" class="w-full h-auto block">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+        </div>
+        <!-- Warning notice -->
+        <div class="mt-6 ml-auto bg-white rounded-2xl px-5 py-4 shd-float max-w-xs" style="filter:brightness(1.1);transform:translateX(80px);">
+          <p class="text-xs font-semibold uppercase tracking-widest mb-1" style="color:#E3051C;font-family:'Poppins',sans-serif;">Safety Notice</p>
+          <p class="text-xs font-semibold text-n700 leading-relaxed">For training &amp; demonstration only.<br>Not for clinical treatment or patient support.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     FAQ
+═══════════════════════════════════════════ -->
+<section id="faq" class="py-24 lg:py-32 bg-white">
+  <div class="max-w-3xl mx-auto px-6 lg:px-10">
+
+    <div class="text-center mb-16">
+      <p class="text-xs font-semibold uppercase tracking-widest mb-3" style="color:#0074DE;font-family:'Poppins',sans-serif;">FAQ</p>
+      <h2 class="font-display font-bold text-4xl lg:text-5xl" style="letter-spacing:-0.03em;color:#1A1A1A;">
+        Frequently asked questions
+      </h2>
+    </div>
+
+    <div style="border-top:1px solid #D8D8D8;">
+
+      <details>
+        <summary class="flex items-center justify-between gap-4 py-5" style="border-bottom:1px solid #D8D8D8;">
+          <span class="font-display font-semibold" style="color:#1A1A1A;">Is this system suitable for use on real patients?</span>
+          <span class="chev flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center" style="background:#F4F4F4;">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#4A4A4A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </summary>
+        <p class="py-5 text-n700" style="border-bottom:1px solid #D8D8D8;">
+          No. This device is strictly for training and demonstration only. It must not be connected to real patients, invasive medical equipment, extracorporeal circulation devices, or clinical monitoring instruments. The simulation pump and cardiac model do not possess clinical safety, biocompatibility, or hemodynamic performance of a genuine pLVAD device.
+        </p>
+      </details>
+
+      <details>
+        <summary class="flex items-center justify-between gap-4 py-5" style="border-bottom:1px solid #D8D8D8;">
+          <span class="font-display font-semibold" style="color:#1A1A1A;">Which pLVAD access routes does the system support?</span>
+          <span class="chev flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center" style="background:#F4F4F4;">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#4A4A4A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </summary>
+        <p class="py-5 text-n700" style="border-bottom:1px solid #D8D8D8;">
+          The system supports both mainstream clinical access approaches: femoral artery access and axillary artery access into the left ventricle. Both vertical and horizontal heart model placements are available to cover diverse clinical training scenarios.
+        </p>
+      </details>
+
+      <details>
+        <summary class="flex items-center justify-between gap-4 py-5" style="border-bottom:1px solid #D8D8D8;">
+          <span class="font-display font-semibold" style="color:#1A1A1A;">How is the system powered?</span>
+          <span class="chev flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center" style="background:#F4F4F4;">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#4A4A4A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </summary>
+        <p class="py-5 text-n700" style="border-bottom:1px solid #D8D8D8;">
+          Dual power supply: four AA batteries or 5V USB (USB-A to USB-C cable). The USB port is located on the rear of the device base and can also be used for firmware upgrades. Do not use damaged, swollen, or modified batteries. Note: Type-C to Type-C power cables may cause the device to fail.
+        </p>
+      </details>
+
+      <details>
+        <summary class="flex items-center justify-between gap-4 py-5" style="border-bottom:1px solid #D8D8D8;">
+          <span class="font-display font-semibold" style="color:#1A1A1A;">Can the impeller be observed during operation?</span>
+          <span class="chev flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center" style="background:#F4F4F4;">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#4A4A4A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </summary>
+        <p class="py-5 text-n700" style="border-bottom:1px solid #D8D8D8;">
+          Yes. An embedded micro-LED above the impeller provides real-time visual illumination. For slow-rotation demonstration, first push the speed lever to high speed, then slowly pull it back — this allows the impeller to rotate at approximately 5 revolutions per second for easy visual observation. The transparent heart model cover enables clear viewing of the pump inside the heart.
+        </p>
+      </details>
+
+      <details>
+        <summary class="flex items-center justify-between gap-4 py-5" style="border-bottom:1px solid #D8D8D8;">
+          <span class="font-display font-semibold" style="color:#1A1A1A;">Are components replaceable or customizable?</span>
+          <span class="chev flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center" style="background:#F4F4F4;">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#4A4A4A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </summary>
+        <p class="py-5 text-n700" style="border-bottom:1px solid #D8D8D8;">
+          The aortic valve is designed to be detachable and replaceable due to wear. The pigtail catheter is also replaceable. Custom configurations are available including axillary artery access versions, sensor modules, fluid-filled versions, compact versions, and custom AI-rendered imagery — contact Cardingenium for details.
+        </p>
+      </details>
+
+      <details>
+        <summary class="flex items-center justify-between gap-4 py-5" style="border-bottom:1px solid #D8D8D8;">
+          <span class="font-display font-semibold" style="color:#1A1A1A;">What are the storage and maintenance requirements?</span>
+          <span class="chev flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center" style="background:#F4F4F4;">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#4A4A4A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </summary>
+        <p class="py-5 text-n700" style="border-bottom:1px solid #D8D8D8;">
+          Keep the system away from prolonged direct sunlight, particularly the transparent cardiac model and pigtail catheter, to prevent yellowing and material aging. For long-term storage, remove batteries and store separately in a cool, dry location. Do not immerse electrical components in water or liquid. Do not disassemble the motor, power module, or control circuit without authorization.
+        </p>
+      </details>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════ -->
+<footer style="background:#1A1A1A;" class="pt-16 pb-8">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-12 pb-12" style="border-bottom:1px solid #2E2E2E;">
+
+      <!-- Brand -->
+      <div class="lg:col-span-1">
+        <div class="inline-flex mb-5 px-3 py-2 rounded-xl" style="background:rgba(255,255,255,0.96);">
+          <img src="Brand-assets/Cardingenium_Logo.png" alt="Cardingenium Medical Technology" class="h-9 w-auto block">
+        </div>
+        <p class="text-sm mb-6" style="color:#8A8A8A;line-height:1.7;">
+          Cardingenium Medical Technology GmbH<br>
+          Fürstenrieder Straße 5 / 3. OG.<br>
+          D-80687 Munich, Germany
+        </p>
+        <a href="#contact"
+          class="btn tc inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold text-white"
+          style="background:#E3051C;font-family:'Poppins',sans-serif;"
+          onmouseover="this.style.background='#B00415'" onmouseout="this.style.background='#E3051C'">
+          Contact Us
+        </a>
+      </div>
+
+      <!-- Product -->
+      <div>
+        <h4 class="font-display font-semibold text-xs text-white mb-5 uppercase tracking-widest">Product</h4>
+        <ul class="space-y-3">
+          <li><a href="#overview"   class="flink text-sm">Overview</a></li>
+          <li><a href="#features"   class="flink text-sm">Features</a></li>
+          <li><a href="#components" class="flink text-sm">Components</a></li>
+          <li><a href="#use-cases"  class="flink text-sm">Use Cases</a></li>
+          <li><a href="#modules"    class="flink text-sm">Modules</a></li>
+        </ul>
+      </div>
+
+      <!-- Resources -->
+      <div>
+        <h4 class="font-display font-semibold text-xs text-white mb-5 uppercase tracking-widest">Resources</h4>
+        <ul class="space-y-3">
+          <li><a href="#" class="flink text-sm">Product Documentation</a></li>
+          <li><a href="#" class="flink text-sm">Request a Demo</a></li>
+          <li><a href="#faq" class="flink text-sm">FAQ</a></li>
+        </ul>
+      </div>
+
+      <!-- Legal -->
+      <div>
+        <h4 class="font-display font-semibold text-xs text-white mb-5 uppercase tracking-widest">Legal</h4>
+        <ul class="space-y-3">
+          <li><a href="#" class="flink text-sm">Imprint</a></li>
+          <li><a href="#" class="flink text-sm">Privacy Policy</a></li>
+        </ul>
+        <div class="mt-12 warn-card rounded-xl px-4 py-3" style="width:fit-content;">
+          <p class="text-xs font-semibold" style="color:#B00415;font-family:'Poppins',sans-serif;">⚠ For Training Only</p>
+          <p class="text-xs text-n700 mt-1">Not for clinical use,<br>patient support,<br>or surgical intervention.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <p class="text-xs" style="color:#4A4A4A;">© 2026 Cardingenium Medical Technology GmbH. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
