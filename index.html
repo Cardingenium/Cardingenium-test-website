@@ -45,11 +45,8 @@
       .hero-line { white-space: normal; }
     }
 
-    /* Safety notice card: right-shifted for visual overlap on desktop, flush on mobile to avoid horizontal overflow */
-    .safety-shift { transform: translateX(80px); }
-    @media (max-width: 640px) {
-      .safety-shift { transform: translateX(0); }
-    }
+    /* Safety notice card: flush with the image's right edge at all breakpoints */
+    .safety-shift { transform: translateX(0); }
 
     /* Hero mark: scales down on narrow phones instead of overflowing the padded container */
     .hero-mark { height: clamp(10rem, 45vw, 25rem); width: auto; max-width: 100%; }
@@ -115,17 +112,6 @@
       background: #E3051C;
       animation: pulse-ring 2.5s cubic-bezier(0.455,0.03,0.515,0.955) infinite;
     }
-
-    /* P-level table */
-    .p-table tr:nth-child(odd)  { background: rgba(0,116,222,0.04); }
-    .p-table tr:nth-child(even) { background: #fff; }
-
-    /* Warning card */
-    .warn-card {
-      border-left: 3px solid #E3051C;
-      background: linear-gradient(135deg, #FDE8EA 0%, #FBD0D6 100%);
-      box-shadow: 0 4px 16px rgba(227,5,28,0.15);
-    }
   </style>
 </head>
 <body>
@@ -143,9 +129,9 @@
 
     <div class="hidden lg:flex items-center gap-8">
       <a href="#overview"    class="tc text-sm font-medium text-n700 hover:text-bb">Product</a>
-      <a href="#features"    class="tc text-sm font-medium text-n700 hover:text-bb">Features</a>
-      <a href="#components"  class="tc text-sm font-medium text-n700 hover:text-bb">Components</a>
       <a href="#use-cases"   class="tc text-sm font-medium text-n700 hover:text-bb">Use Cases</a>
+      <a href="#components"  class="tc text-sm font-medium text-n700 hover:text-bb">Components</a>
+      <a href="#features"    class="tc text-sm font-medium text-n700 hover:text-bb">Features</a>
       <a href="#modules"     class="tc text-sm font-medium text-n700 hover:text-bb">Modules</a>
       <a href="#faq"         class="tc text-sm font-medium text-n700 hover:text-bb">FAQ</a>
     </div>
@@ -182,9 +168,9 @@
     style="max-height:0;transition:max-height 0.3s cubic-bezier(0.34,1.02,0.64,1);background:#fff;border-top:1px solid rgba(216,216,216,0.6);">
     <div class="px-6 py-4 flex flex-col">
       <a href="#overview"    onclick="closeMobileMenu()" class="tc text-base font-medium text-n700 py-3" style="border-bottom:1px solid #F4F4F4;">Product</a>
-      <a href="#features"    onclick="closeMobileMenu()" class="tc text-base font-medium text-n700 py-3" style="border-bottom:1px solid #F4F4F4;">Features</a>
-      <a href="#components"  onclick="closeMobileMenu()" class="tc text-base font-medium text-n700 py-3" style="border-bottom:1px solid #F4F4F4;">Components</a>
       <a href="#use-cases"   onclick="closeMobileMenu()" class="tc text-base font-medium text-n700 py-3" style="border-bottom:1px solid #F4F4F4;">Use Cases</a>
+      <a href="#components"  onclick="closeMobileMenu()" class="tc text-base font-medium text-n700 py-3" style="border-bottom:1px solid #F4F4F4;">Components</a>
+      <a href="#features"    onclick="closeMobileMenu()" class="tc text-base font-medium text-n700 py-3" style="border-bottom:1px solid #F4F4F4;">Features</a>
       <a href="#modules"     onclick="closeMobileMenu()" class="tc text-base font-medium text-n700 py-3" style="border-bottom:1px solid #F4F4F4;">Modules</a>
       <a href="#faq"         onclick="closeMobileMenu()" class="tc text-base font-medium text-n700 py-3" style="border-bottom:1px solid #F4F4F4;">FAQ</a>
       <a href="#contact" onclick="closeMobileMenu()"
@@ -229,7 +215,7 @@
     <p class="text-lg lg:text-xl text-n700 mb-10 max-w-2xl mx-auto" style="text-align:center;">
       A compact, professional simulation platform for
       <br>
-      procedural training, technical demonstration, and patient education
+      procedural training, patient education, and technical demonstration
       <br>
       Designed by Cardingenium Medical Technology
     </p>
@@ -287,7 +273,7 @@
   <div class="max-w-7xl mx-auto px-6 lg:px-10">
 
     <div class="max-w-2xl mb-16">
-      <p class="text-xs font-semibold uppercase tracking-widest mb-3" style="color:#0074DE;font-family:'Poppins',sans-serif;">Overview</p>
+      <p class="text-xs font-semibold uppercase tracking-widest mb-6" style="color:#0074DE;font-family:'Poppins',sans-serif;">Overview</p>
       <h2 class="font-display font-bold text-4xl lg:text-5xl mb-6" style="letter-spacing:-0.03em;color:#1A1A1A;">
         Simulation without compromise
       </h2>
@@ -347,7 +333,7 @@
   <div class="max-w-7xl mx-auto px-6 lg:px-10">
 
     <div class="text-center max-w-2xl mx-auto mb-16">
-      <p class="text-xs font-semibold uppercase tracking-widest mb-3" style="color:#E3051C;font-family:'Poppins',sans-serif;">Use Cases</p>
+      <p class="text-xs font-semibold uppercase tracking-widest mb-6" style="color:#E3051C;font-family:'Poppins',sans-serif;">Use Cases</p>
       <h2 class="font-display font-bold text-4xl lg:text-5xl mb-6" style="letter-spacing:-0.03em;color:#1A1A1A;">
         Purpose-built for clinical learning
       </h2>
@@ -361,7 +347,7 @@
       <!-- Card 1 -->
       <article class="ts lift rounded-2xl overflow-hidden bg-white shd-card flex flex-col">
         <div class="img-zoom relative aspect-video">
-          <img src="https://placehold.co/600x338/E6F2FD/0074DE?text=Procedural+Training"
+          <img src="Brand-assets/PT.png"
             alt="Procedural Training" class="w-full h-full object-cover">
           <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
           <div class="absolute inset-0" style="background:rgba(0,116,222,0.10);mix-blend-mode:multiply;"></div>
@@ -384,7 +370,7 @@
       <!-- Card 2 -->
       <article class="ts lift rounded-2xl overflow-hidden bg-white shd-card flex flex-col">
         <div class="img-zoom relative aspect-video">
-          <img src="https://placehold.co/600x338/FDE8EA/E3051C?text=Patient+Education"
+          <img src="Brand-assets/PE.jpg"
             alt="Patient Education" class="w-full h-full object-cover">
           <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
           <div class="absolute inset-0" style="background:rgba(227,5,28,0.10);mix-blend-mode:multiply;"></div>
@@ -407,7 +393,7 @@
       <!-- Card 3 -->
       <article class="ts lift rounded-2xl overflow-hidden bg-white shd-card flex flex-col">
         <div class="img-zoom relative aspect-video">
-          <img src="https://placehold.co/600x338/F4F4F4/4A4A4A?text=Tech+Demonstration"
+          <img src="Brand-assets/TD.jpg"
             alt="Technical Demonstration" class="w-full h-full object-cover">
           <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
           <div class="absolute inset-0" style="background:rgba(26,26,26,0.08);mix-blend-mode:multiply;"></div>
@@ -433,9 +419,54 @@
 
 
 <!-- ═══════════════════════════════════════════
+     COMPONENTS  (4-col cards)
+═══════════════════════════════════════════ -->
+<section id="components" class="py-24 lg:py-32 bg-white">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+    <div class="text-center max-w-2xl mx-auto mb-16">
+      <p class="text-xs font-semibold uppercase tracking-widest mb-3" style="color:#E3051C;font-family:'Poppins',sans-serif;">Components</p>
+      <h2 class="font-display font-bold text-4xl lg:text-5xl mb-6" style="letter-spacing:-0.03em;color:#1A1A1A;text-align:center;line-height:1.5;">
+        Every part
+        <br>
+        Precisely designed
+      </h2>
+      <p class="text-lg text-n700">
+        Each component of the pLVAD system is engineered to replicate real clinical anatomy and device mechanics.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+      <div class="ts lift bg-white rounded-2xl p-6 shd-card">
+        <h3 class="font-display font-semibold text-base mb-2" style="color:#1A1A1A;">Transparent Heart Model</h3>
+        <p class="text-sm text-n700">Left &amp; right chambers, aortic arch, descending aorta, three soft silicone valves. Magnetic assembly and disassembly. Replaceable aortic valve.</p>
+      </div>
+
+      <div class="ts lift bg-white rounded-2xl p-6 shd-card">
+        <h3 class="font-display font-semibold text-base mb-2" style="color:#1A1A1A;">1:1 Scale pLVAD Model</h3>
+        <p class="text-sm text-n700">Designed and manufactured at 1:1 scale. Rotatable impeller with adjustable speed, micro-LED illumination, butterfly magnetic connector at catheter tail.</p>
+      </div>
+
+      <div class="ts lift bg-white rounded-2xl p-6 shd-card">
+        <h3 class="font-display font-semibold text-base mb-2" style="color:#1A1A1A;">Equipment Base</h3>
+        <p class="text-sm text-n700">Integrates heart model bracket, storage drawer, display screen, battery compartment, power switch, and aircraft-inspired speed control lever.</p>
+      </div>
+
+      <div class="ts lift bg-white rounded-2xl p-6 shd-card">
+        <h3 class="font-display font-semibold text-base mb-2" style="color:#1A1A1A;">Accessories</h3>
+        <p class="text-sm text-n700">Includes EasyGuide Lumen, 0.018-inch installing guidewire, pump fixing clip, and storage for the original heart pump in the drawer compartment.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
      FEATURES ACCORDION
 ═══════════════════════════════════════════ -->
-<section id="features" class="py-24 lg:py-32 bg-white">
+<section id="features" class="py-24 lg:py-32" style="background:#F4F4F4;">
   <div class="max-w-7xl mx-auto px-6 lg:px-10">
 
     <div class="max-w-2xl mb-16">
@@ -466,29 +497,14 @@
         <summary class="flex items-center justify-between gap-4 py-5" style="border-bottom:1px solid #D8D8D8;">
           <div class="flex items-center gap-3">
             <span class="acc-dot tc w-2 h-2 rounded-full flex-shrink-0" style="background:#D8D8D8;"></span>
-            <span class="font-display font-semibold text-lg" style="color:#1A1A1A;">Adjustable High-Speed Motor with LED</span>
+            <span class="font-display font-semibold text-lg" style="color:#1A1A1A;">Adjustable High/Low-Speed Motor with LED</span>
           </div>
           <span class="chev flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center" style="background:#F4F4F4;">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#4A4A4A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </span>
         </summary>
         <p class="py-5 text-n700 max-w-3xl" style="border-bottom:1px solid #D8D8D8;">
-          The simulated pLVAD pump is equipped with a continuously adjustable high-speed motor. Theoretical impeller speed can reach 50,000 rpm; the system limits maximum speed to extend motor service life. A micro-LED above the impeller provides real-time visual feedback of rotational status. For demonstration at ultra-low speed (~5 revolutions per second), push the lever to high speed first, then slowly pull back.
-        </p>
-      </details>
-
-      <details>
-        <summary class="flex items-center justify-between gap-4 py-5" style="border-bottom:1px solid #D8D8D8;">
-          <div class="flex items-center gap-3">
-            <span class="acc-dot tc w-2 h-2 rounded-full flex-shrink-0" style="background:#D8D8D8;"></span>
-            <span class="font-display font-semibold text-lg" style="color:#1A1A1A;">Aircraft-Inspired Controller</span>
-          </div>
-          <span class="chev flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center" style="background:#F4F4F4;">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#4A4A4A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </span>
-        </summary>
-        <p class="py-5 text-n700 max-w-3xl" style="border-bottom:1px solid #D8D8D8;">
-          Inspired by aircraft cockpit design, the speed control lever operates like an aircraft thrust lever. Push forward to increase impeller speed (P0–P9). Pull-to-unlock toggle switches manage main power supply and impeller LED separately, providing an intuitive and memorable training experience.
+          The simulated pLVAD pump is equipped with a continuously adjustable high-speed motor. Theoretical impeller speed can reach 50,000 rpm; the system limits maximum speed to extend motor service life. A micro-LED above the impeller provides real-time visual feedback of rotational status. For demonstration at ultra-low speed (~5 rpm), push the lever to high speed first, then slowly pull back.
         </p>
       </details>
 
@@ -526,106 +542,16 @@
         <summary class="flex items-center justify-between gap-4 py-5" style="border-bottom:1px solid #D8D8D8;">
           <div class="flex items-center gap-3">
             <span class="acc-dot tc w-2 h-2 rounded-full flex-shrink-0" style="background:#D8D8D8;"></span>
-            <span class="font-display font-semibold text-lg" style="color:#1A1A1A;">Display Screen with P-Level Readout</span>
+            <span class="font-display font-semibold text-lg" style="color:#1A1A1A;">Display Screen</span>
           </div>
           <span class="chev flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center" style="background:#F4F4F4;">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#4A4A4A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </span>
         </summary>
         <div class="py-5" style="border-bottom:1px solid #D8D8D8;">
-          <p class="text-n700 max-w-3xl mb-6">The onboard display shows operating parameters including P-level (P0–P9) and corresponding mean flow rates, replicating a clinical pLVAD controller interface.</p>
-          <div class="overflow-x-auto max-w-sm">
-            <table class="p-table w-full text-sm rounded-xl overflow-hidden border" style="border-color:#E6F2FD;">
-              <thead>
-                <tr style="background:#0074DE;">
-                  <th class="px-5 py-3 text-left font-semibold text-white" style="font-family:'Poppins',sans-serif;">P-Level</th>
-                  <th class="px-5 py-3 text-left font-semibold text-white" style="font-family:'Poppins',sans-serif;">Mean Flow Rate (L/min)</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-blue-50">
-                <tr><td class="px-5 py-2.5 text-n700">P-0</td><td class="px-5 py-2.5 text-n700">0.0</td></tr>
-                <tr><td class="px-5 py-2.5 text-n700">P-1</td><td class="px-5 py-2.5 text-n700">0.0 – 0.9</td></tr>
-                <tr><td class="px-5 py-2.5 text-n700">P-2</td><td class="px-5 py-2.5 text-n700">1.1 – 2.1</td></tr>
-                <tr><td class="px-5 py-2.5 text-n700">P-3</td><td class="px-5 py-2.5 text-n700">1.6 – 2.3</td></tr>
-                <tr><td class="px-5 py-2.5 text-n700">P-4</td><td class="px-5 py-2.5 text-n700">2.0 – 2.5</td></tr>
-                <tr><td class="px-5 py-2.5 text-n700">P-5</td><td class="px-5 py-2.5 text-n700">2.3 – 2.7</td></tr>
-                <tr><td class="px-5 py-2.5 text-n700">P-6</td><td class="px-5 py-2.5 text-n700">2.5 – 2.9</td></tr>
-                <tr><td class="px-5 py-2.5 text-n700">P-7</td><td class="px-5 py-2.5 text-n700">2.9 – 3.3</td></tr>
-                <tr><td class="px-5 py-2.5 text-n700">P-8</td><td class="px-5 py-2.5 text-n700">3.1 – 3.4</td></tr>
-                <tr><td class="px-5 py-2.5 text-n700">P-9</td><td class="px-5 py-2.5 text-n700">3.3 – 3.7</td></tr>
-              </tbody>
-            </table>
-          </div>
+          <p class="text-n700 max-w-3xl">The onboard display shows operating parameters corresponding mean flow rates, replicating a clinical pLVAD controller interface.</p>
         </div>
       </details>
-
-    </div>
-  </div>
-</section>
-
-
-<!-- ═══════════════════════════════════════════
-     COMPONENTS  (4-col cards)
-═══════════════════════════════════════════ -->
-<section id="components" class="py-24 lg:py-32" style="background:#F4F4F4;">
-  <div class="max-w-7xl mx-auto px-6 lg:px-10">
-
-    <div class="text-center max-w-2xl mx-auto mb-16">
-      <p class="text-xs font-semibold uppercase tracking-widest mb-3" style="color:#E3051C;font-family:'Poppins',sans-serif;">Components</p>
-      <h2 class="font-display font-bold text-4xl lg:text-5xl mb-6" style="letter-spacing:-0.03em;color:#1A1A1A;text-align:center;line-height:1.5;">
-        Every part
-        <br>
-        Precisely designed
-      </h2>
-      <p class="text-lg text-n700">
-        Each component of the pLVAD system is engineered to replicate real clinical anatomy and device mechanics.
-      </p>
-    </div>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-
-      <div class="ts lift bg-white rounded-2xl p-6 shd-card">
-        <div class="w-12 h-12 rounded-xl mb-5 flex items-center justify-center" style="background:#E6F2FD;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-            <path d="M12 21C12 21 4 16.5 4 10a8 8 0 0116 0c0 6.5-8 11-8 11z" stroke="#0074DE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <h3 class="font-display font-semibold text-base mb-2" style="color:#1A1A1A;">Transparent Heart Model</h3>
-        <p class="text-sm text-n700">Left &amp; right chambers, aortic arch, descending aorta, three soft silicone valves. Magnetic assembly and disassembly. Replaceable aortic valve.</p>
-      </div>
-
-      <div class="ts lift bg-white rounded-2xl p-6 shd-card">
-        <div class="w-12 h-12 rounded-xl mb-5 flex items-center justify-center" style="background:#FDE8EA;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-            <path d="M12 2v6M12 22v-6M4.93 4.93l4.24 4.24M14.83 14.83l4.24 4.24M2 12h6M22 12h-6M4.93 19.07l4.24-4.24M14.83 9.17l4.24-4.24" stroke="#E3051C" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <h3 class="font-display font-semibold text-base mb-2" style="color:#1A1A1A;">1:1 Scale pLVAD Model</h3>
-        <p class="text-sm text-n700">Designed and manufactured at 1:1 scale. Rotatable impeller with adjustable speed, micro-LED illumination, butterfly magnetic connector at catheter tail.</p>
-      </div>
-
-      <div class="ts lift bg-white rounded-2xl p-6 shd-card">
-        <div class="w-12 h-12 rounded-xl mb-5 flex items-center justify-center" style="background:#E6F2FD;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-            <rect x="2" y="7" width="20" height="14" rx="2" stroke="#0074DE" stroke-width="1.5"/>
-            <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" stroke="#0074DE" stroke-width="1.5" stroke-linecap="round"/>
-            <line x1="12" y1="12" x2="12" y2="16" stroke="#0074DE" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <h3 class="font-display font-semibold text-base mb-2" style="color:#1A1A1A;">Equipment Base</h3>
-        <p class="text-sm text-n700">Integrates heart model bracket, storage drawer, display screen, battery compartment, power switch, and aircraft-inspired speed control lever.</p>
-      </div>
-
-      <div class="ts lift bg-white rounded-2xl p-6 shd-card">
-        <div class="w-12 h-12 rounded-xl mb-5 flex items-center justify-center" style="background:#FDE8EA;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-            <path d="M12 5v14M5 12h14" stroke="#E3051C" stroke-width="1.5" stroke-linecap="round"/>
-            <circle cx="12" cy="12" r="9" stroke="#E3051C" stroke-width="1.5"/>
-          </svg>
-        </div>
-        <h3 class="font-display font-semibold text-base mb-2" style="color:#1A1A1A;">Accessories</h3>
-        <p class="text-sm text-n700">Includes EasyGuide Lumen, 0.018-inch installing guidewire, pump fixing clip, and storage for the original heart pump in the drawer compartment.</p>
-      </div>
 
     </div>
   </div>
@@ -650,47 +576,51 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
-      <div class="ts lift bg-white rounded-2xl p-6 shd-card">
-        <div class="w-12 h-12 rounded-xl mb-5 flex items-center justify-center" style="background:#E6F2FD;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-            <path d="M12 3v7M12 10l-5 9M12 10l5 9" stroke="#0074DE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+      <div class="ts lift rounded-2xl overflow-hidden bg-white shd-card flex flex-col">
+        <div class="img-zoom relative aspect-video flex items-center justify-center p-6" style="background:#FFFFFF;">
+          <img src="Brand-assets/FAAAM.png" alt="Vascular Access Modules" class="max-w-full max-h-full object-contain">
         </div>
-        <h3 class="font-display font-semibold text-base mb-2" style="color:#1A1A1A;">Vascular Access Modules</h3>
-        <p class="text-sm text-n700">Femoral and axillary artery vascular modules connect to the heart model via quick adapters, with an optional sensor system for real-time positional tracking of the pump.</p>
+        <div style="height:1px;background:linear-gradient(to right, transparent, #E0E0E0 20%, #E0E0E0 80%, transparent);"></div>
+        <div class="p-6">
+          <h3 class="font-display font-semibold text-base mb-2" style="color:#1A1A1A;">Vascular Access Modules</h3>
+          <p class="text-sm text-n700">Femoral and axillary artery vascular modules connect to the heart model via quick adapters, with an optional sensor system for real-time positional tracking of the pump.</p>
+        </div>
       </div>
 
-      <div class="ts lift bg-white rounded-2xl p-6 shd-card">
-        <div class="w-12 h-12 rounded-xl mb-5 flex items-center justify-center" style="background:#FDE8EA;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-            <path d="M12 2C12 2 5 10 5 15a7 7 0 0014 0c0-5-7-13-7-13z" stroke="#E3051C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+      <div class="ts lift rounded-2xl overflow-hidden bg-white shd-card flex flex-col">
+        <div class="img-zoom relative aspect-video flex items-center justify-center p-6" style="background:#FFFFFF;">
+          <img src="Brand-assets/AI.png" alt="AI-Driven Simulation & Imaging" class="max-w-full max-h-full object-contain">
         </div>
-        <h3 class="font-display font-semibold text-base mb-2" style="color:#1A1A1A;">Fluid Visualization Module</h3>
-        <p class="text-sm text-n700">A dual-tank fluid circuit shows fluid moving into and out of the aorta in real time, with an electric pump recirculating flow — a clearer alternative to a plain water-submerged demo.</p>
+        <div style="height:1px;background:linear-gradient(to right, transparent, #E0E0E0 20%, #E0E0E0 80%, transparent);"></div>
+        <div class="p-6">
+          <h3 class="font-display font-semibold text-base mb-2" style="color:#1A1A1A;">AI-Driven Simulation &amp; Imaging</h3>
+          <p class="text-sm text-n700">Real-time rendered ultrasound and cardiography imaging from live camera input, with patient-case loading, scenario simulation, and voice-guided procedural debriefing.</p>
+        </div>
       </div>
 
-      <div class="ts lift bg-white rounded-2xl p-6 shd-card">
-        <div class="w-12 h-12 rounded-xl mb-5 flex items-center justify-center" style="background:#E6F2FD;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-            <path d="M3 12h4l2-7 4 14 2-7h6" stroke="#0074DE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+      <div class="ts lift rounded-2xl overflow-hidden bg-white shd-card flex flex-col">
+        <div class="img-zoom relative aspect-video flex items-center justify-center p-6" style="background:#FFFFFF;">
+          <img src="Brand-assets/FVM%20new.png" alt="Fluid Visualization Module" class="max-w-full max-h-full object-contain">
         </div>
-        <h3 class="font-display font-semibold text-base mb-2" style="color:#1A1A1A;">AI-Driven Simulation &amp; Imaging</h3>
-        <p class="text-sm text-n700">Real-time rendered ultrasound and cardiography imaging from live camera input, with patient-case loading, scenario simulation, and voice-guided procedural debriefing.</p>
+        <div style="height:1px;background:linear-gradient(to right, transparent, #E0E0E0 20%, #E0E0E0 80%, transparent);"></div>
+        <div class="p-6">
+          <h3 class="font-display font-semibold text-base mb-2" style="color:#1A1A1A;">Fluid Visualization Module</h3>
+          <p class="text-sm text-n700">A dual-tank fluid circuit shows fluid moving into and out of the aorta in real time, with an electric pump recirculating flow — a clearer alternative to a plain water-submerged demo.</p>
+        </div>
       </div>
 
-      <div class="ts lift bg-white rounded-2xl p-6 shd-card">
-        <div class="w-12 h-12 rounded-xl mb-5 flex items-center justify-center" style="background:#FDE8EA;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-            <path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4z" stroke="#E3051C" stroke-width="1.5" stroke-linejoin="round"/>
-          </svg>
+      <div class="ts lift rounded-2xl overflow-hidden bg-white shd-card flex flex-col">
+        <div class="img-zoom relative aspect-video flex items-center justify-center p-6" style="background:#FFFFFF;">
+          <img src="Brand-assets/HM.png" alt="Alternative Heart Model" class="max-w-full max-h-full object-contain">
         </div>
-        <h3 class="font-display font-semibold text-base mb-2" style="color:#1A1A1A;">Alternative Heart Model</h3>
-        <p class="text-sm text-n700">A desktop-ornament version of the heart model for clinicians' offices, with an optional heart-pump-shaped pen accessory for a practical, branded touch.</p>
+        <div style="height:1px;background:linear-gradient(to right, transparent, #E0E0E0 20%, #E0E0E0 80%, transparent);"></div>
+        <div class="p-6">
+          <h3 class="font-display font-semibold text-base mb-2" style="color:#1A1A1A;">Alternative Heart Model</h3>
+          <p class="text-sm text-n700">A desktop-ornament version of the heart model for clinicians' offices, with an optional heart-pump-shaped pen accessory for a practical, branded touch.</p>
+        </div>
       </div>
-
     </div>
+
   </div>
 </section>
 
@@ -728,14 +658,6 @@
             </span>
             <span class="text-sm" style="color:#D8D8D8;">Fürstenrieder Straße 5 / 3. OG., D-80687 Munich, Germany</span>
           </li>
-          <li class="flex items-start gap-3">
-            <span class="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center mt-0.5" style="background:rgba(0,116,222,0.15);">
-              <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-                <path d="M2 5l2 2 4-4" stroke="#0074DE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </span>
-            <span class="text-sm" style="color:#D8D8D8;">Made in Europe</span>
-          </li>
         </ul>
         <a href="mailto:info@cardingenium.com"
           class="btn tc inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold text-white shd-red"
@@ -746,19 +668,23 @@
             <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </a>
+
+        <div class="mt-10 bg-white rounded-2xl px-5 py-4 shd-float max-w-xs" style="filter:brightness(1.1);">
+          <p class="text-xs font-semibold uppercase tracking-widest mb-1" style="color:#E3051C;font-family:'Poppins',sans-serif;">Customization</p>
+          <p class="text-xs font-semibold text-n700 leading-relaxed">Nothing here is fixed.<br>Hardware, Software, and every User Interface can be <span style="white-space:nowrap;">tailored precisely</span> to your program's exact requirements.</p>
+        </div>
       </div>
 
       <!-- Right — stat card -->
       <div class="stat-card-wrap relative mx-auto">
         <div class="rounded-2xl overflow-hidden" style="box-shadow:0 8px 32px rgba(0,0,0,0.4),0 24px 64px rgba(0,0,0,0.25);">
-          <img src="Brand-assets/TDS%20new.png"
+          <img src="Brand-assets/Modules.png"
             alt="pLVAD Training System" class="w-full h-auto block">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
         </div>
         <!-- Warning notice -->
         <div class="safety-shift mt-6 ml-auto bg-white rounded-2xl px-5 py-4 shd-float max-w-xs" style="filter:brightness(1.1);">
           <p class="text-xs font-semibold uppercase tracking-widest mb-1" style="color:#E3051C;font-family:'Poppins',sans-serif;">Safety Notice</p>
-          <p class="text-xs font-semibold text-n700 leading-relaxed">For training &amp; demonstration only.<br>Not for clinical treatment or patient support.</p>
+          <p class="text-xs font-semibold text-n700 leading-relaxed"><span style="white-space:nowrap;">For training &amp; demonstration only.</span><br>Not for clinical treatment or patient support.</p>
         </div>
       </div>
 
@@ -774,7 +700,7 @@
   <div class="max-w-3xl mx-auto px-6 lg:px-10">
 
     <div class="text-center mb-16">
-      <p class="text-xs font-semibold uppercase tracking-widest mb-3" style="color:#0074DE;font-family:'Poppins',sans-serif;">FAQ</p>
+      <p class="text-xs font-semibold uppercase tracking-widest mb-6" style="color:#0074DE;font-family:'Poppins',sans-serif;">FAQ</p>
       <h2 class="font-display font-bold text-4xl lg:text-5xl" style="letter-spacing:-0.03em;color:#1A1A1A;">
         Frequently asked questions
       </h2>
@@ -814,7 +740,9 @@
           </span>
         </summary>
         <p class="py-5 text-n700" style="border-bottom:1px solid #D8D8D8;">
-          Dual power supply: four AA batteries or 5V USB (USB-A to USB-C cable). The USB port is located on the rear of the device base and can also be used for firmware upgrades. Do not use damaged, swollen, or modified batteries. Note: Type-C to Type-C power cables may cause the device to fail.
+          Dual power supply: four AA batteries or 5V USB (USB-A to USB-C cable). The USB port is located on the rear of the device base and can also be used for firmware upgrades. Do not use damaged, swollen, or modified batteries.
+          <br>
+          <span style="color:#E3051C;">Note:</span> Type-C to Type-C power cables may cause the device to fail.
         </p>
       </details>
 
@@ -826,7 +754,7 @@
           </span>
         </summary>
         <p class="py-5 text-n700" style="border-bottom:1px solid #D8D8D8;">
-          Yes. An embedded micro-LED above the impeller provides real-time visual illumination. For slow-rotation demonstration, first push the speed lever to high speed, then slowly pull it back — this allows the impeller to rotate at approximately 5 revolutions per second for easy visual observation. The transparent heart model cover enables clear viewing of the pump inside the heart.
+          Yes. An embedded micro-LED above the impeller provides real-time visual illumination. For slow-rotation demonstration, first push the speed lever to high speed, then slowly pull it back — this allows the impeller to rotate at approximately 5 rpm for easy visual observation. The transparent heart model cover enables clear viewing of the pump inside the heart.
         </p>
       </details>
 
@@ -872,7 +800,7 @@
           <img src="Brand-assets/Cardingenium_Logo.png" alt="Cardingenium Medical Technology" class="h-9 w-auto block">
         </div>
         <p class="text-sm mb-6" style="color:#8A8A8A;line-height:1.7;">
-          Cardingenium Medical Technology GmbH<br>
+          <span style="white-space:nowrap;">Cardingenium Medical Technology GmbH</span><br>
           Fürstenrieder Straße 5 / 3. OG.<br>
           D-80687 Munich, Germany
         </p>
@@ -885,13 +813,13 @@
       </div>
 
       <!-- Product -->
-      <div>
+      <div class="lg:pl-12">
         <h4 class="font-display font-semibold text-xs text-white mb-5 uppercase tracking-widest">Product</h4>
         <ul class="space-y-3">
           <li><a href="#overview"   class="flink text-sm">Overview</a></li>
-          <li><a href="#features"   class="flink text-sm">Features</a></li>
-          <li><a href="#components" class="flink text-sm">Components</a></li>
           <li><a href="#use-cases"  class="flink text-sm">Use Cases</a></li>
+          <li><a href="#components" class="flink text-sm">Components</a></li>
+          <li><a href="#features"   class="flink text-sm">Features</a></li>
           <li><a href="#modules"    class="flink text-sm">Modules</a></li>
         </ul>
       </div>
@@ -900,8 +828,8 @@
       <div>
         <h4 class="font-display font-semibold text-xs text-white mb-5 uppercase tracking-widest">Resources</h4>
         <ul class="space-y-3">
-          <li><a href="#" class="flink text-sm">Product Documentation</a></li>
-          <li><a href="#" class="flink text-sm">Request a Demo</a></li>
+          <li><a href="#contact" class="flink text-sm">Product Documentation</a></li>
+          <li><a href="#contact" class="flink text-sm">Request Information</a></li>
           <li><a href="#faq" class="flink text-sm">FAQ</a></li>
         </ul>
       </div>
@@ -910,19 +838,15 @@
       <div>
         <h4 class="font-display font-semibold text-xs text-white mb-5 uppercase tracking-widest">Legal</h4>
         <ul class="space-y-3">
-          <li><a href="#" class="flink text-sm">Imprint</a></li>
-          <li><a href="#" class="flink text-sm">Privacy Policy</a></li>
+          <li><a href="imprint.html" class="flink text-sm">Imprint</a></li>
+          <li><a href="privacy-policy.html" class="flink text-sm">Privacy Policy</a></li>
         </ul>
-        <div class="mt-12 warn-card rounded-xl px-4 py-3" style="width:fit-content;">
-          <p class="text-xs font-semibold" style="color:#B00415;font-family:'Poppins',sans-serif;">⚠ For Training Only</p>
-          <p class="text-xs text-n700 mt-1">Not for clinical use,<br>patient support,<br>or surgical intervention.</p>
-        </div>
       </div>
 
     </div>
 
     <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-3">
-      <p class="text-xs" style="color:#4A4A4A;">© 2026 Cardingenium Medical Technology GmbH. All rights reserved.</p>
+      <p class="text-xs" style="color:#4A4A4A;">© 2026 <span style="white-space:nowrap;">Cardingenium Medical Technology GmbH</span>. All rights reserved.</p>
     </div>
   </div>
 </footer>

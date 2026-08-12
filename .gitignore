@@ -4,3 +4,10 @@ VSCodeUserSetup-x64-1.113.0.exe
 
 # Confidential / not-for-distribution source documents
 *.pdf
+
+# Internal deliverables / duplicates / temp files (not part of the site)
+*.docx
+~$*
+CLAUDE new.md
+Brand-assets/Archive/
+Brand-assets/FVM.png
